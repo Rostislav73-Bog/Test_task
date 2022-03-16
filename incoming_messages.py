@@ -1,51 +1,38 @@
 from fastapi import APIRouter
-
-from message import Message
-
+from messages import Message
 router = APIRouter(
     prefix="/messages",
     tags=["messages"]
 )
 
-text = []
+data = []
+
 
 message = Message(
     id=1,
-    text="dfbfb",
-)
-
-text.append(message)
-
-message = Message(
-    id=2,
     text="kdvnkdokfebe",
 )
 
-text.append(message)
-
-
-@router.get("/")
-async def message():
-    return text
+data.append(message)
 
 
 @router.get("/{id}")
 async def sms(id: int):
-    for message in text:
+    for message in data:
         if message.id == id:
             return message
 
 
-@router.post("/") #Cjj
+@router.post("/{id}")
 async def add_text(message: Message):
-    message.id = text[-1].id + 1
-    text.append(message)
-    return text
+    message.id = data[-1].id + 1
+    data.append(message)
+    return data
 
 
 @router.put("/{id}")
 async def update_text(id: int, message: Message):
-    for all_message in text:
+    for all_message in data:
         if all_message.id == id:
             all_message.text = message.text
             return all_message
@@ -53,6 +40,7 @@ async def update_text(id: int, message: Message):
 
 @router.delete("/{id}")
 async def del_text(id: int):
-    for message in text:
+
+    for message in data:
         if message.id == id:
-            text.remove(message)
+            data.remove(message)
